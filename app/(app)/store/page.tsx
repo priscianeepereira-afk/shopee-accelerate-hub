@@ -2,14 +2,12 @@
 
 // Painel da Loja — Loja Fitness Ana
 // Front-end only. Mapeado em /Users/prisc/Downloads/VendeAI-git/src/pages/StoreDashboard.tsx
-// Segue _PAGE_PATTERN.md: card unico englobando titulo + subtitulo + conteudo.
-// Icones 100% lucide-react (sem emoji de UI).
+// Refatorado pra usar primitivas da Fase 0: PageShell, BackLink, StatusPill, MetricCard, ModalShell.
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ChevronRight,
-  ArrowLeft,
   Package,
   Wallet,
   ShoppingBag,
@@ -20,17 +18,22 @@ import {
   Star,
   MessageSquare,
   XCircle,
-  Clock,
   AlertTriangle,
   CheckCircle2,
   BarChart3,
   Factory,
   Settings,
-  X,
   Printer,
   Truck,
   type LucideIcon,
 } from "lucide-react";
+import { BackLink } from "../_components/BackLink";
+import {
+  StatusPill,
+  type StatusVariant,
+} from "../_components/StatusPill";
+import { MetricCard } from "../_components/MetricCard";
+import { ModalShell } from "../_components/ModalShell";
 
 // ============ Mock data ============
 
@@ -46,7 +49,12 @@ interface Order {
   actions: ActionType[];
 }
 
-const metrics: { label: string; value: string; icon: LucideIcon; accent: string }[] = [
+const metrics: {
+  label: string;
+  value: string;
+  icon: LucideIcon;
+  accent: string;
+}[] = [
   { label: "Pedidos Hoje", value: "3", icon: Package, accent: "#F15A5A" },
   { label: "Faturado Hoje", value: "R$ 247,80", icon: Wallet, accent: "#F5C9A0" },
   { label: "Pedidos este Mês", value: "47", icon: ShoppingBag, accent: "#C8B8D8" },
@@ -78,14 +86,15 @@ const orders: Order[] = [
   { id: "#10230", product: "Fone Bluetooth TWS", client: "Paulo M.", value: "R$ 89,90", status: "entregue", actions: ["view"] },
 ];
 
-const orderStatusConfig: Record<
+// Mapeia status do pedido pra variante do StatusPill
+const orderStatusVariant: Record<
   OrderStatus,
-  { label: string; bg: string; text: string }
+  { variant: StatusVariant; label: string }
 > = {
-  aguardando: { label: "Aguardando Envio", bg: "bg-[#F15A5A]/10", text: "text-[#B23838]" },
-  pago: { label: "Pago", bg: "bg-[#22C55E]/[0.08]", text: "text-[#15803d]" },
-  enviado: { label: "Enviado", bg: "bg-[#C8B8D8]/25", text: "text-[#6B5A85]" },
-  entregue: { label: "Entregue", bg: "bg-black/[0.04]", text: "text-black/50" },
+  aguardando: { variant: "coral", label: "Aguardando Envio" },
+  pago: { variant: "success", label: "Pago" },
+  enviado: { variant: "lavanda", label: "Enviado" },
+  entregue: { variant: "muted", label: "Entregue" },
 };
 
 const healthStatusConfig: Record<
@@ -126,7 +135,16 @@ function LiveClock() {
     return () => clearInterval(id);
   }, []);
 
-  if (!now) return <div className="rounded-[14px] border border-white/[0.06] p-5 min-h-[232px]" style={{ background: "linear-gradient(180deg, rgba(60,40,60,0.85) 0%, rgba(30,20,35,0.92) 100%)" }} />;
+  if (!now)
+    return (
+      <div
+        className="rounded-[14px] border border-white/[0.06] p-5 min-h-[232px]"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(60,40,60,0.85) 0%, rgba(30,20,35,0.92) 100%)",
+        }}
+      />
+    );
 
   const hh = String(now.getHours()).padStart(2, "0");
   const mm = String(now.getMinutes()).padStart(2, "0");
@@ -141,7 +159,6 @@ function LiveClock() {
           "linear-gradient(180deg, rgba(60,40,60,0.92) 0%, rgba(30,20,35,0.96) 100%)",
       }}
     >
-      {/* Linha superior colorida (padrao Bloom) */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#F15A5A]/60" />
 
       <p className="text-[42px] font-medium text-white/90 tracking-[-0.02em] leading-none font-mono tabular-nums">
@@ -215,17 +232,8 @@ export default function StoreDashboardPage() {
             <span className="text-black/70 font-medium">Loja Fitness Ana</span>
           </nav>
 
-          {/* Voltar */}
-          <button
-            type="button"
-            onClick={() => router.push("/integrations")}
-            className="inline-flex items-center gap-1.5 text-[12px] font-normal text-[#fb923c] hover:text-[#A8692A] transition-colors mb-4"
-          >
-            <ArrowLeft size={12} strokeWidth={1.5} />
-            Voltar para Minhas Integrações
-          </button>
+          <BackLink to="/integrations" label="Voltar para Minhas Integrações" className="mb-4" />
 
-          {/* Titulo */}
           <h1 className="text-[24px] font-normal tracking-[-0.01em] text-black/85">
             Painel da Loja — Loja Fitness Ana
           </h1>
@@ -235,25 +243,15 @@ export default function StoreDashboardPage() {
 
           {/* Metricas */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {metrics.map((m) => {
-              const Icon = m.icon;
-              return (
-                <div
-                  key={m.label}
-                  className="rounded-[14px] border border-black/[0.04] bg-[#FAF8F5] p-5"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <Icon size={20} strokeWidth={1.5} style={{ color: m.accent }} />
-                  </div>
-                  <p className="text-[26px] font-medium text-black/85 tracking-[-0.02em] leading-none">
-                    {m.value}
-                  </p>
-                  <p className="text-[12px] font-normal text-black/40 mt-2">
-                    {m.label}
-                  </p>
-                </div>
-              );
-            })}
+            {metrics.map((m) => (
+              <MetricCard
+                key={m.label}
+                icon={m.icon}
+                iconColor={m.accent}
+                value={m.value}
+                label={m.label}
+              />
+            ))}
           </div>
 
           {/* Saude da Loja */}
@@ -267,10 +265,7 @@ export default function StoreDashboardPage() {
                   Visão geral dos indicadores — dados alimentados pela integração Shopee
                 </p>
               </div>
-              <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-normal bg-[#22C55E]/[0.08] text-[#15803d] border border-[#22C55E]/20">
-                <span className="h-2 w-2 rounded-full bg-[#22C55E]" />
-                Saudável
-              </span>
+              <StatusPill variant="success">Saudável</StatusPill>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
@@ -284,7 +279,9 @@ export default function StoreDashboardPage() {
                   >
                     <div className="flex items-center justify-between mb-2">
                       <Icon size={16} strokeWidth={1.5} className="text-black/55" />
-                      <span className={`inline-flex items-center gap-1 text-[10px] font-normal ${s.text}`}>
+                      <span
+                        className={`inline-flex items-center gap-1 text-[10px] font-normal ${s.text}`}
+                      >
                         <span className={`h-1.5 w-1.5 rounded-full ${s.dot}`} />
                         {s.label}
                       </span>
@@ -354,7 +351,7 @@ export default function StoreDashboardPage() {
                     </thead>
                     <tbody>
                       {orders.map((o) => {
-                        const cfg = orderStatusConfig[o.status];
+                        const cfg = orderStatusVariant[o.status];
                         return (
                           <tr
                             key={o.id}
@@ -369,11 +366,7 @@ export default function StoreDashboardPage() {
                               {o.value}
                             </td>
                             <td className="py-3">
-                              <span
-                                className={`inline-flex items-center text-[10px] font-normal px-2 py-0.5 rounded-full ${cfg.bg} ${cfg.text}`}
-                              >
-                                {cfg.label}
-                              </span>
+                              <StatusPill variant={cfg.variant}>{cfg.label}</StatusPill>
                             </td>
                             <td className="py-3">
                               <div className="flex gap-1.5 flex-wrap">
@@ -454,9 +447,8 @@ export default function StoreDashboardPage() {
                 </div>
               </div>
 
-              {/* Gestao Rapida + LiveClock lado a lado */}
+              {/* Gestao Rapida + LiveClock */}
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                {/* Gestao Rapida */}
                 <div className="rounded-[14px] border border-black/[0.04] bg-[#FAF8F5] p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <Settings size={14} strokeWidth={1.5} className="text-black/55" />
@@ -487,7 +479,6 @@ export default function StoreDashboardPage() {
                   </div>
                 </div>
 
-                {/* LiveClock */}
                 <LiveClock />
               </div>
             </div>
@@ -496,136 +487,91 @@ export default function StoreDashboardPage() {
       </div>
 
       {/* Modal Etiqueta */}
-      {labelModal && (
-        <div
-          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-6"
-          onClick={() => setLabelModal(null)}
-        >
-          <div
-            className="w-full max-w-[480px] rounded-[16px] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.20)] overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between gap-4 p-6 border-b border-black/[0.04]">
-              <div>
-                <h3 className="text-[16px] font-normal tracking-[-0.01em] text-black/85">
-                  Etiqueta de Envio — {labelModal}
-                </h3>
-                <p className="text-[12px] font-normal text-black/40 mt-0.5">
-                  Shopee Express — Sedex
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setLabelModal(null)}
-                className="h-8 w-8 rounded-full inline-flex items-center justify-center text-black/40 hover:bg-black/[0.04] hover:text-black/60 transition-colors shrink-0"
-                aria-label="Fechar"
-              >
-                <X size={16} strokeWidth={1.5} />
-              </button>
+      <ModalShell
+        open={!!labelModal}
+        onClose={() => setLabelModal(null)}
+        title={`Etiqueta de Envio — ${labelModal ?? ""}`}
+        subtitle="Shopee Express — Sedex"
+      >
+        <div className="space-y-4">
+          <div className="rounded-[12px] border-2 border-dashed border-black/[0.08] p-5 text-center bg-[#FAF8F5]">
+            <div className="mx-auto w-52 h-16 rounded-[8px] bg-white border border-black/[0.06] flex items-center justify-center mb-3 font-mono text-[11px] text-black/55 tracking-wider">
+              ||||| |||| ||||| ||||
             </div>
-
-            <div className="p-6 space-y-4">
-              <div className="rounded-[12px] border-2 border-dashed border-black/[0.08] p-5 text-center bg-[#FAF8F5]">
-                <div className="mx-auto w-52 h-16 rounded-[8px] bg-white border border-black/[0.06] flex items-center justify-center mb-3 font-mono text-[11px] text-black/55 tracking-wider">
-                  ||||| |||| ||||| ||||
-                </div>
-                <p className="text-[13px] font-medium text-black/80 tabular-nums">
-                  SP123456789BR
-                </p>
-                <p className="text-[11px] font-normal text-black/40 mt-0.5">
-                  Código de rastreio
-                </p>
-              </div>
-
-              <div className="space-y-1.5 text-[12px] font-normal">
-                <p>
-                  <span className="text-black/40">Destinatário:</span>{" "}
-                  <span className="text-black/80">Maria L.</span>
-                </p>
-                <p>
-                  <span className="text-black/40">Endereço:</span>{" "}
-                  <span className="text-black/80">
-                    Rua das Flores, 123 — São Paulo/SP
-                  </span>
-                </p>
-                <p>
-                  <span className="text-black/40">Produto:</span>{" "}
-                  <span className="text-black/80">Conjunto Fitness P</span>
-                </p>
-              </div>
-
-              <button
-                type="button"
-                className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 rounded-full bg-[#F15A5A]/15 text-[#B23838] text-[13px] font-normal border border-[#F15A5A]/25 hover:bg-[#F15A5A]/25 transition-colors"
-              >
-                <Printer size={14} strokeWidth={1.5} />
-                Imprimir Etiqueta
-              </button>
-            </div>
+            <p className="text-[13px] font-medium text-black/80 tabular-nums">
+              SP123456789BR
+            </p>
+            <p className="text-[11px] font-normal text-black/40 mt-0.5">
+              Código de rastreio
+            </p>
           </div>
+
+          <div className="space-y-1.5 text-[12px] font-normal">
+            <p>
+              <span className="text-black/40">Destinatário:</span>{" "}
+              <span className="text-black/80">Maria L.</span>
+            </p>
+            <p>
+              <span className="text-black/40">Endereço:</span>{" "}
+              <span className="text-black/80">Rua das Flores, 123 — São Paulo/SP</span>
+            </p>
+            <p>
+              <span className="text-black/40">Produto:</span>{" "}
+              <span className="text-black/80">Conjunto Fitness P</span>
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 rounded-full bg-[#F15A5A]/15 text-[#B23838] text-[13px] font-normal border border-[#F15A5A]/25 hover:bg-[#F15A5A]/25 transition-colors"
+          >
+            <Printer size={14} strokeWidth={1.5} />
+            Imprimir Etiqueta
+          </button>
         </div>
-      )}
+      </ModalShell>
 
       {/* Modal Pagamento */}
-      {paymentModal && (
-        <div
-          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-6"
-          onClick={() => setPaymentModal(false)}
-        >
-          <div
-            className="w-full max-w-[440px] rounded-[16px] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.20)] overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between gap-4 p-6 border-b border-black/[0.04]">
-              <h3 className="text-[16px] font-normal tracking-[-0.01em] text-black/85">
-                Confirmar Pagamento
-              </h3>
-              <button
-                type="button"
-                onClick={() => setPaymentModal(false)}
-                className="h-8 w-8 rounded-full inline-flex items-center justify-center text-black/40 hover:bg-black/[0.04] hover:text-black/60 transition-colors shrink-0"
-                aria-label="Fechar"
-              >
-                <X size={16} strokeWidth={1.5} />
-              </button>
-            </div>
+      <ModalShell
+        open={paymentModal}
+        onClose={() => setPaymentModal(false)}
+        title="Confirmar Pagamento"
+        maxWidth="440px"
+      >
+        <div className="space-y-4">
+          <div className="rounded-[12px] bg-[#FAF8F5] border border-black/[0.04] p-4">
+            <p className="text-[11px] font-normal text-black/40">Fornecedor</p>
+            <p className="text-[14px] font-normal text-black/80 mt-0.5">
+              ForneceMais Distribuidora
+            </p>
+            <p className="text-[24px] font-medium text-[#B23838] tracking-[-0.02em] mt-2">
+              R$ 840,00
+            </p>
+          </div>
 
-            <div className="p-6 space-y-4">
-              <div className="rounded-[12px] bg-[#FAF8F5] border border-black/[0.04] p-4">
-                <p className="text-[11px] font-normal text-black/40">Fornecedor</p>
-                <p className="text-[14px] font-normal text-black/80 mt-0.5">
-                  ForneceMais Distribuidora
-                </p>
-                <p className="text-[24px] font-medium text-[#B23838] tracking-[-0.02em] mt-2">
-                  R$ 840,00
-                </p>
-              </div>
+          <p className="text-[12px] font-normal text-black/50 leading-[1.55]">
+            Ao confirmar, o pagamento será processado via PIX.
+          </p>
 
-              <p className="text-[12px] font-normal text-black/50 leading-[1.55]">
-                Ao confirmar, o pagamento será processado via PIX.
-              </p>
-
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setPaymentModal(false)}
-                  className="flex-1 py-2.5 rounded-full border border-black/[0.08] text-[12px] font-normal text-black/65 hover:bg-black/[0.03] transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPaymentModal(false)}
-                  className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-full bg-[#F15A5A]/15 text-[#B23838] text-[12px] font-normal border border-[#F15A5A]/25 hover:bg-[#F15A5A]/25 transition-colors"
-                >
-                  <CheckCircle2 size={12} strokeWidth={1.5} />
-                  Confirmar Pagamento
-                </button>
-              </div>
-            </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setPaymentModal(false)}
+              className="flex-1 py-2.5 rounded-full border border-black/[0.08] text-[12px] font-normal text-black/65 hover:bg-black/[0.03] transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onClick={() => setPaymentModal(false)}
+              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-full bg-[#F15A5A]/15 text-[#B23838] text-[12px] font-normal border border-[#F15A5A]/25 hover:bg-[#F15A5A]/25 transition-colors"
+            >
+              <CheckCircle2 size={12} strokeWidth={1.5} />
+              Confirmar Pagamento
+            </button>
           </div>
         </div>
-      )}
+      </ModalShell>
     </div>
   );
 }
