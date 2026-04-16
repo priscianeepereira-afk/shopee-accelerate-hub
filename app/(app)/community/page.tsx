@@ -201,10 +201,10 @@ export default function CommunityPage() {
   };
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto">
+    <div className="p-2">
       <div
         className="flex rounded-[14px] border border-black/[0.04] overflow-hidden bg-white/40"
-        style={{ minHeight: "720px", maxHeight: "calc(100vh - 7rem)" }}
+        style={{ minHeight: "calc(100vh - 5rem)", maxHeight: "calc(100vh - 5rem)" }}
       >
         {/* ===== FEED ===== */}
         <div className="flex-1 overflow-y-auto p-6">
