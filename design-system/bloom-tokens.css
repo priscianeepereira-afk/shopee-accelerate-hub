@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+
+.bloom {
+  /* Core Colors */
+  --bloom-light: #F5F0EB;
+  --bloom-dark: #1A1A2E;
+  --bloom-black: #111118;
+  --bloom-white: #FFFFFF;
+
+  /* Brand */
+  --bloom-brand: #F15A5A;
+  --bloom-brand-hover: #E04848;
+  --bloom-brand-light: #FEF2F2;
+
+  /* Secondary */
+  --bloom-accent: #C8B8D8;
+  --bloom-tertiary: #D4A0A0;
+  --bloom-gutenberg: #E8D5B5;
+
+  /* Text */
+  --bloom-text-primary: #1A1A2E;
+  --bloom-text-secondary: #4A4A5A;
+  --bloom-text-muted: #8A8A9A;
+  --bloom-text-on-dark: #FFFFFF;
+  --bloom-text-on-dark-muted: #A0A0B0;
+
+  /* Border */
+  --bloom-border: #E8E4E0;
+  --bloom-border-strong: #D0CCC8;
+
+  /* Chart */
+  --bloom-chart-cream: #F5EDE5;
+  --bloom-chart-pink-light: #F2C4CC;
+  --bloom-chart-pink: #E88E9E;
+  --bloom-chart-pink-deep: #D4607A;
+  --bloom-chart-coral: #F15A5A;
+
+  /* Hero */
+  --bloom-hero-start: #D8C8E8;
+  --bloom-hero-end: #F0E8F5;
+
+  /* Status */
+  --bloom-success: #22C55E;
+  --bloom-danger: #EF4444;
+  --bloom-warning: #F59E0B;
+
+  /* Typography */
+  --bloom-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --bloom-font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  /* Border Radius */
+  --bloom-radius-sm: 6px;
+  --bloom-radius-md: 8px;
+  --bloom-radius-lg: 12px;
+  --bloom-radius-xl: 16px;
+  --bloom-radius-2xl: 20px;
+  --bloom-radius-full: 9999px;
+  --bloom-radius-card: 16px;
+  --bloom-radius-button: 8px;
+  --bloom-radius-input: 8px;
+
+  /* Shadows */
+  --bloom-shadow-card: 0 1px 3px rgba(26, 26, 46, 0.06);
+  --bloom-shadow-card-hover: 0 4px 16px rgba(26, 26, 46, 0.10);
+  --bloom-shadow-card-elevated: 0 8px 30px rgba(26, 26, 46, 0.12);
+  --bloom-shadow-button: 0 1px 2px rgba(26, 26, 46, 0.05);
+  --bloom-shadow-button-hover: 0 2px 8px rgba(241, 90, 90, 0.20);
+  --bloom-shadow-modal: 0 20px 60px rgba(26, 26, 46, 0.25);
+  --bloom-shadow-navbar: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  /* Transitions */
+  --bloom-transition-fast: 150ms ease;
+  --bloom-transition-default: 200ms ease;
+  --bloom-transition-slow: 300ms ease;
+
+  /* Base styles */
+  font-family: var(--bloom-font-sans);
+  color: var(--bloom-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Bloom Typography Resets */
+.bloom h1,
+.bloom h2,
+.bloom h3,
+.bloom h4,
+.bloom h5,
+.bloom h6 {
+  font-family: var(--bloom-font-sans);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.bloom-serif-accent {
+  font-family: var(--bloom-font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Bloom Scrollbar */
+.bloom ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bloom ::-webkit-scrollbar-track {
+  background: var(--bloom-light);
+}
+
+.bloom ::-webkit-scrollbar-thumb {
+  background: var(--bloom-text-muted);
+  border-radius: 3px;
+}

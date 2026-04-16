@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary (warm orange) — usado pelo BloomButton variant=primary */
+    --primary: 24 95% 53%; /* #F97316 */
+  }
+
+  html,
+  body {
+    background: #F5F0EB;
+    color: #1A1A2E;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+}
+
+/* Bloom tokens (copiados de V2/design-system/bloom-tokens.css) */
+.bloom {
+  --bloom-light: #F5F0EB;
+  --bloom-dark: #1A1A2E;
+  --bloom-black: #111118;
+  --bloom-white: #FFFFFF;
+  --bloom-brand: #F15A5A;
+  --bloom-brand-hover: #E04848;
+  --bloom-brand-light: #FEF2F2;
+  --bloom-accent: #C8B8D8;
+  --bloom-tertiary: #D4A0A0;
+  --bloom-gutenberg: #E8D5B5;
+  --bloom-text-primary: #1A1A2E;
+  --bloom-text-secondary: #4A4A5A;
+  --bloom-text-muted: #8A8A9A;
+  --bloom-text-on-dark: #FFFFFF;
+  --bloom-text-on-dark-muted: #A0A0B0;
+  --bloom-border: #E8E4E0;
+  --bloom-border-strong: #D0CCC8;
+  --bloom-success: #22C55E;
+  --bloom-danger: #EF4444;
+  --bloom-warning: #F59E0B;
+  --bloom-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --bloom-font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --bloom-radius-card: 16px;
+  --bloom-radius-button: 8px;
+  --bloom-radius-input: 8px;
+  font-family: var(--bloom-font-sans);
+  color: var(--bloom-text-primary);
+}
+
+.bloom h1,
+.bloom h2,
+.bloom h3,
+.bloom h4,
+.bloom h5,
+.bloom h6 {
+  font-family: var(--bloom-font-sans);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.bloom-serif-accent {
+  font-family: var(--bloom-font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
