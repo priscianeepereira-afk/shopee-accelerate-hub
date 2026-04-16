@@ -201,10 +201,10 @@ export default function CommunityPage() {
   };
 
   return (
-    <div className="p-2">
+    <div className="px-2 pb-2">
       <div
         className="flex rounded-[14px] border border-black/[0.04] overflow-hidden bg-white/40"
-        style={{ minHeight: "calc(100vh - 5rem)", maxHeight: "calc(100vh - 5rem)" }}
+        style={{ minHeight: "calc(100vh - 4.5rem)", maxHeight: "calc(100vh - 4.5rem)" }}
       >
         {/* ===== FEED ===== */}
         <div className="flex-1 overflow-y-auto p-6">
@@ -447,9 +447,9 @@ export default function CommunityPage() {
         </div>
 
         {/* ===== ENGAJADA DO MES ===== */}
-        <div className="w-48 shrink-0 pt-6 flex flex-col items-center border-l border-black/[0.04]">
+        <div className="w-60 shrink-0 pt-6 flex flex-col items-center border-l border-black/[0.04]">
           <div
-            className="w-44 rounded-[14px] border border-[#F5C9A0]/30 overflow-hidden text-center relative shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
+            className="w-52 rounded-[14px] border border-[#F5C9A0]/30 overflow-hidden text-center relative shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
             style={{
               background:
                 "linear-gradient(165deg, rgba(245,201,160,0.45) 0%, rgba(221,214,238,0.5) 50%, rgba(242,196,204,0.4) 100%)",
@@ -494,7 +494,7 @@ export default function CommunityPage() {
         </div>
 
         {/* ===== RANKING ===== */}
-        <aside className="w-72 shrink-0 border-l border-black/[0.04] bg-white/80 overflow-y-auto">
+        <aside className="w-80 shrink-0 border-l border-black/[0.04] bg-white/80 overflow-y-auto">
           <div className="p-5 space-y-5">
             <div>
               <div className="flex items-center gap-2 mb-1">
