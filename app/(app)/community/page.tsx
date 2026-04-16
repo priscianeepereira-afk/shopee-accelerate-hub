@@ -201,11 +201,10 @@ export default function CommunityPage() {
   };
 
   return (
-    <div className="px-2 pb-2">
-      <div
-        className="flex rounded-[14px] border border-black/[0.04] overflow-hidden bg-white/40"
-        style={{ minHeight: "calc(100vh - 4.5rem)", maxHeight: "calc(100vh - 4.5rem)" }}
-      >
+    <div
+      className="flex overflow-hidden bg-white/40"
+      style={{ minHeight: "calc(100vh - 4rem)", maxHeight: "calc(100vh - 4rem)" }}
+    >
         {/* ===== FEED ===== */}
         <div className="flex-1 overflow-y-auto p-6">
           {/* Header */}
@@ -647,7 +646,6 @@ export default function CommunityPage() {
             </div>
           </div>
         </aside>
-      </div>
     </div>
   );
 }
