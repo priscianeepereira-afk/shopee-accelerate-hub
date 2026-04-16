@@ -493,7 +493,7 @@ export default function CommunityPage() {
         </div>
 
         {/* ===== RANKING ===== */}
-        <aside className="w-80 shrink-0 border-l border-black/[0.04] bg-white/80 overflow-y-auto">
+        <aside className="w-[400px] shrink-0 border-l border-black/[0.04] bg-white/80 overflow-y-auto">
           <div className="p-5 space-y-5">
             <div>
               <div className="flex items-center gap-2 mb-1">
